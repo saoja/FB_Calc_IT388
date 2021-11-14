@@ -91,6 +91,8 @@ int main(){
     vector<Team> teams;
 
     //input data from file
+    
+    
     for(int i = 0; i<N;i++){
         Player temp;
        temp.setName(" ");
@@ -100,19 +102,30 @@ int main(){
        temp.setRecvingYards(100);
        temp.setroutesRun(5);
        
-       // calc 
+       // calc for players
        temp.yppr();
        temp.ypt();
         
        list.push_back(temp);
 
     }
-    for(int i =0; i< 33 ; i++){
-        Team temp; 
-        for (int i = 0 ; i<list.size();  )
+    //initialize all 32 teams. 
+    Team Bears;
+    Bears.setName("Bears");
+    teams.push_back(Bears);
+    //...etc
+    
+    
+    //push players into correct teams
+    for(int i =0; i< teams.size() ; i++){
+        Team temp = Teams[i]; 
+        for (int j = 0 ; j<list.size(); j++ ){
+            if(temp.getName==list[j].getTeam()){
+                temp.push_back(list[j]);
+                }
+            }
         
     }
-    
        
     //sort list based on rating/a single stat
 
