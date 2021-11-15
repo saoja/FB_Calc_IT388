@@ -126,9 +126,7 @@ int main(){
 
     }
     //initialize all 32 teams. 
-    Team Bears;
-    Bears.setName("Bears");
-    teams.push_back(Bears);
+    
     //...etc
     
     
