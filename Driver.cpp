@@ -81,7 +81,23 @@ class Team {
     
     
 };
+void insertionSort(vector<Player>arr){
+//key should the comparable variable that ranks the players. 
+int i,j, key;
+int size= arr.size();
+    //add #pragma parrallel for
+    for(i=1;i<size-1;i++){
+        key = arr[i];
+        j=i-1;
+        
+        while(j>=0&& arr[j]>key){
+            arr[j+1]=arr[j];
+            j=j-1;
+        }
+        arr[j+1]=key;
+    }
 
+}
 
 
 
@@ -90,7 +106,7 @@ int main(){
     vector<Player> list;
     vector<Team> teams;
 
-    //input data from file
+    //input data from csv file
     
     
     for(int i = 0; i<N;i++){
@@ -128,6 +144,8 @@ int main(){
     }
        
     //sort list based on rating/a single stat
+    insertionSort(list);
+    
 
     return 0;
 }
