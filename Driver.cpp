@@ -44,8 +44,8 @@ class Player{
         this->age=age;
     }
     void setRecvingYards(int recivingYards){this->recivingYards=recivingYards;}
-    void setrecivingTargets(int recivingTargets){this->recivingTargets=recivingTargets;}
-    void setroutesRun(int routesRun){this->routesRun=routesRun;}
+    void setRecivingTargets(int recivingTargets){this->recivingTargets=recivingTargets;}
+    void setRoutesRun(int routesRun){this->routesRun=routesRun;}
     
     //calculations vars
     //Yards per routes run
@@ -82,12 +82,13 @@ class Team {
     int getYds(){return yds;}
     int getPts(){return pts;}
     int getPtsA(){return ptsA;}
-    
+    string getName(){return name;}
+    void setName(string name){this-> name=name;}
     void setWins(int totalWins){this->totalWins=totalWins;}
-    void setYardsAllowed(int yardsAllowed){this->yardsAllowed;}
-    void setYds(int yds){this->yds;}
-    void setTotalPts(int pts){this-> pts;}
-    void setPtsAllowed(int ptsA){this-> ptsA;}
+    void setYardsAllowed(int yardsAllowed){this->yardsAllowed=yardsAllowed;}
+    void setYds(int yds){this->yds=yds;}
+    void setTotalPts(int pts){this-> pts=pts;}
+    void setPtsAllowed(int ptsA){this-> ptsA=ptsA;}
     
     //calc
     double calcWinProb(Team A, Team B){
@@ -148,6 +149,21 @@ int main(){
 
     return 0;
 }
+void CalcTeamWinProb(string TeamA,string TeamB){
+    Team A , B;
+    Team A.setName(TeamA);
+    Team B.setName(TeamB);
+    
+    //open team.csv files and push data into team objects
+    
+    double probA = A.calcProb(A,B);
+    double probB = 1- probA;
+    cout<< "prob: A-"<<probA<<" B-"<<probB<<endl;
+    
+}
+void CalcAllTeamMatches(vector<string> Matchups){
+
+}
 void insertionSort(vector<Player>arr){
 //key should the comparable variable that ranks the players. 
 int i,j, key;
@@ -164,4 +180,32 @@ int size= arr.size();
         arr[j+1]=key;
     }
 
+}
+void Players(string playersFile){
+
+vector<Player> list;
+   //change to while loop
+ for(int i = 0; i<N;i++){
+        Player temp;
+       temp.setName(" ");
+       temp.setTeam(" ");
+       temp.setAge(25);
+       temp.setrecivingTargets(10);
+       temp.setRecvingYards(100);
+       temp.setroutesRun(5);
+       
+       // calc for players
+       temp.yppr();
+       temp.ypt();
+        
+       list.push_back(temp);
+
+    }
+ insertionSort(list);
+ for(int i=0; i<list.size();i++){
+    cout<<list[i].getName()<<" "<< list[i].getTeam()<<" "<< list[i].getAge()<<" "<< list[i].getRecivingTagerts()<<" "<< list[i].getRecvingYards()<<" "<< list[i].getRoutesRun()<<endl;
+ 
+ }
+
+   
 }
