@@ -149,6 +149,8 @@ int main(){
 
     return 0;
 }
+Driver(){
+}
 void CalcTeamWinProb(string TeamA,string TeamB){
     Team A , B;
     Team A.setName(TeamA);
