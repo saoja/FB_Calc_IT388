@@ -68,36 +68,37 @@ class Team {
     vector<Player> members;
     string name;
     int totalWins;
+    int yardsAllowed;
+    int yds;
+    int pts;
+    int ptsA;
     double winProb;
     
     void addPlayer(Player p){
         members.push_back(p);
     }
+    int getWins(){return totalWins;}
+    int getYardsAll(){return yardsAllowed;}
+    int getYds(){return yds;}
+    int getPts(){return pts;}
+    int getPtsA(){return ptsA;}
+    
+    void setWins(int totalWins){this->totalWins=totalWins;}
+    void setYardsAllowed(int yardsAllowed){this->yardsAllowed;}
+    void setYds(int yds){this->yds;}
+    void setTotalPts(int pts){this-> pts;}
+    void setPtsAllowed(int ptsA){this-> ptsA;}
     
     //calc
     double calcWinProb(Team A, Team B){
-        return 0;
+        double predict=(    (A.getWins()*0.3)   +   (A.getYds()*.15)    +   (A.getYardsAllowed()*.25)   +   (A.getPts()*.15)    +   (A.getPtsA()*.15)   )  /
+                       (    (B.getWins()*0.3)   +   (B.getYds()*.15)    +   (B.getYardsAllowed()*.25)   +   (B.getPts()*.15)    +   (B.getPtsA()*.15)   );
+        
     }
     
     
 };
-void insertionSort(vector<Player>arr){
-//key should the comparable variable that ranks the players. 
-int i,j, key;
-int size= arr.size();
-    //add #pragma parrallel for
-    for(i=1;i<size-1;i++){
-        key = arr[i];
-        j=i-1;
-        
-        while(j>=0&& arr[j]>key){
-            arr[j+1]=arr[j];
-            j=j-1;
-        }
-        arr[j+1]=key;
-    }
 
-}
 
 
 
@@ -146,4 +147,21 @@ int main(){
     
 
     return 0;
+}
+void insertionSort(vector<Player>arr){
+//key should the comparable variable that ranks the players. 
+int i,j, key;
+int size= arr.size();
+    //add #pragma parrallel for
+    for(i=1;i<size-1;i++){
+        key = arr[i];
+        j=i-1;
+        
+        while(j>=0&& arr[j]>key){
+            arr[j+1]=arr[j];
+            j=j-1;
+        }
+        arr[j+1]=key;
+    }
+
 }
