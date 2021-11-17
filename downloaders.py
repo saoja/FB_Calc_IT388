@@ -4,6 +4,7 @@
 # uses "pro-football-reference.com"
 # program written from scratch
 
+from re import match
 from bs4 import BeautifulSoup
 import requests
 import csv
@@ -11,9 +12,11 @@ import os
 
 players_directory = "./players"
 teams_directory = "./teams"
+matchups_directory = "./matchups"
 
 # initialize folders to store the .csv files
 try:
+    os.mkdir(matchups_directory)
     os.mkdir(players_directory)
     os.mkdir(teams_directory)
 except OSError as e:
@@ -59,6 +62,21 @@ teams = {
 }
 
 # function for getting the matchups (current week)
+def fill_matchups():
+
+    url = base_url + "/years/2021/games.htm"
+    games = requests.get(url).content
+    soupie = BeautifulSoup(games, "lxml")
+    all_games = soupie.find("table", {"id": "games"})
+
+    rows = all_games.findAll("tr")
+    for row in rows:
+        cells = row.findAll("td")
+        if len(cells) > 0:
+            team1 = cells[3].text
+            team2 = cells[5].text
+            out_file = open(matchups_directory + "/matchups.csv", "w")
+            out_writer = csv.writer(out_file)
 
 
 # function to get a player's season stats (or career)
@@ -100,50 +118,113 @@ def download_all_players(letter):
         # soupify the information
         single_player = requests.get(unique_url).content
         soupier = BeautifulSoup(single_player, "lxml")
-        stats = soupier.find("div", id="div_stats")
+        table = soupier.find("table", {"id": "stats"})
 
         # player's position to determine which stats to pull
-        pos = soupier.find("strong", text="Position").next_sibling.strip("\n : \n\t")
         try:
-            for tr in stats.findAll("tr"):
-                if pos == "WR" or pos == "TE":
-                    rec_stats(stats)
-                elif pos == "RB":
-                    rush_stats(stats)
-                elif pos == "QB":
-                    qb_stats(stats)
-                else:
-                    pass
+            pos = soupier.find("strong", text="Position").next_sibling.strip("\n : \n\t")
         except:
             pass
-
+        player_name = soupier.find("h1", {"itemprop": "name"}).text.strip("\n : \n\t").split()
         
-            
-# allow pulling of specific positional stats
-def rec_stats(stats):
+        try:
+            player_fname = player_name[0]
+            player_lname = player_name[1]
+        except:
+            player_fname = ""
+            player_lname = player_name[0]
 
-    row_to_write = []
+        if table.find("stats"):
+            out_file = open(players_directory+ "/" + player_lname + player_fname + ".csv", "w")
+            out_writer = csv.writer(out_file)
+        
 
-    targets = stats.find("td", {"data-stat": "targets"}).text
-    receptions = stats.find("td", {"data-stat": "rec"}).text
-    rec_yards = stats.find("td", {"data-stat": "rec_yds"}).text
-    touchdowns = stats.find("td", {"data-stat": "rec_td"}).text
-    
-    row_to_write.append(targets)
-    row_to_write.append(receptions)
-    row_to_write.append(rec_yards)
-    row_to_write.append(touchdowns)
+            if pos == "TE" or pos == "WR":
 
-    print(row_to_write)
+                rows = []
+                try:
+                    rows = table.findAll("tr")
+                except:
+                    pass
+                for row in rows:
+                    cells = row.findAll("td")
+                    row_to_write = []
+                    if len(cells) > 0:
+                        try:
+                            targets = cells[5].text
+                            receptions = cells[6].text
+                            rec_yards = cells[7].text
+                            touchdowns = cells[9].text
 
+                            row_to_write.append(targets)
+                            row_to_write.append(receptions)
+                            row_to_write.append(rec_yards)
+                            row_to_write.append(touchdowns)
+                            out_writer.writerow(row_to_write)
+                        except:
+                            pass
+                    else:
+                        pass
 
+                    row_to_write = []
+                    
+            elif pos == "RB":
+                rows = []
+                try:
+                    rows = table.findAll("tr")
+                except:
+                    pass
+                for row in rows:
+                    cells = row.findAll("td")
+                    row_to_write = []
+                    if len(cells) > 0:
+                        try:
+                            rushes = cells[6].text
+                            rush_yds = cells[7].text
+                            touchdowns = cells[9].text
 
-def qb_stats():
-    pass
+                            row_to_write.append(rushes)
+                            row_to_write.append(rush_yds)
+                            row_to_write.append(touchdowns)
+                            out_writer.writerow(row_to_write)
+                        except:
+                            pass
+                    else:
+                        pass
 
-def rush_stats():
-    pass
+                    row_to_write = []
 
+            elif pos == "QB":
+                rows = []
+                try:
+                    rows = table.findAll("tr")
+                except:
+                    pass
+                for row in rows:
+                    cells = row.findAll("td")
+                    row_to_write = []
+                    if len(cells) > 0:
+                        try:
+                            completions = cells[6].text
+                            attempts = cells[7].text
+                            pass_yards = cells[9].text
+                            pass_tds = cells[10].text
+                            ints = cells[11].text
+
+                            row_to_write.append(completions)
+                            row_to_write.append(attempts)
+                            row_to_write.append(pass_yards)
+                            row_to_write.append(pass_tds)
+                            row_to_write.append(ints)
+                            out_writer.writerow(row_to_write)
+                        except:
+                            pass
+                    else:
+                        pass
+
+                    row_to_write = []
+            else:
+                pass
 
 # parallelism will speedup the hell outta this though
 def download_teams_serial():
@@ -155,7 +236,7 @@ def download_teams_serial():
     for team in teams:
 
         # csv creation / instantiation
-        out_file = open(teams_directory + team + ".csv", "w")
+        out_file = open(teams_directory + "/" + team + ".csv", "w")
         out_writer = csv.writer(out_file)
 
         # record (w, l, d)
@@ -206,9 +287,6 @@ def download_teams_serial():
         # close out the file for security
         out_file.close()
 
-            
-
-
 # simple testing (as to not spam website) ((and test functionality))
 # this function is actual magic I've been awake too long
 def test(name):
@@ -242,13 +320,7 @@ def test(name):
     # player's position
     pos = split_name[2]
 
-
-# to do :
-# download current week matchup into week#.csv
-# download all player data for 'B' and 'S'
-
-# download_teams_serial()
+fill_matchups()
+download_teams_serial()
 # test("Davante Adams WR")
-# download_all_players("B")
-# download_all_players("S")
-download_all_players("U")
+download_all_players("A")
