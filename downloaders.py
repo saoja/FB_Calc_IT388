@@ -69,14 +69,18 @@ def fill_matchups():
     soupie = BeautifulSoup(games, "lxml")
     all_games = soupie.find("table", {"id": "games"})
 
+
+    out_file = open(matchups_directory + "/matchups.csv", "w")
+    out_writer = csv.writer(out_file)
+
     rows = all_games.findAll("tr")
     for row in rows:
         cells = row.findAll("td")
         if len(cells) > 0:
-            team1 = cells[3].text
-            team2 = cells[5].text
-            out_file = open(matchups_directory + "/matchups.csv", "w")
-            out_writer = csv.writer(out_file)
+            team1 = [cells[3].text]
+            team2 = [cells[5].text]
+            out_writer.writerow(team1)
+            out_writer.writerow(team2)
 
 
 # function to get a player's season stats (or career)
