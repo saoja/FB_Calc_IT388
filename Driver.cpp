@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-//#include "Player.cpp"
 #include"Team.cpp"
 #include <sstream>
+//include<omp.h>
 using namespace std;
 class Driver{
 public:
@@ -43,6 +43,23 @@ public:
                 }
                 //iterate through vars and initialize team 
                 A.setName(vars[0]);// etc
+                stringstream s;
+                int n;
+                s<<vars[1];
+                s>>n;
+                A.setWins(n);
+                  s<<vars[2];
+                s>>n;
+                A.setYardsAllowed(n);
+                s<<vars[3];
+                s>>n;
+                A.setTotalPts(n);
+                s<<vars[4];
+                s>>n;
+                A.setPtsAllowed(n);
+                s<<vars[5];
+                s>>n;
+                A.setYds(n);
 
                 }
             }
@@ -70,6 +87,23 @@ public:
                 }
                 //iterate through vars and initialize team 
                 B.setName(vars[0]);// etc
+                stringstream s;
+                int n;
+                s<<vars[1];
+                s>>n;
+                B.setWins(n);
+                  s<<vars[2];
+                s>>n;
+                B.setYardsAllowed(n);
+                s<<vars[3];
+                s>>n;
+                B.setTotalPts(n);
+                s<<vars[4];
+                s>>n;
+                B.setPtsAllowed(n);
+                s<<vars[5];
+                s>>n;
+                B.setYds(n);
             }
             }
             myFile.close();
@@ -110,6 +144,23 @@ public:
                     }
                     //iterate through vars and initialize team 
                     temp.setName(vars[0]);// etc
+                     stringstream s;
+                    int n;
+                    s<<vars[1];
+                    s>>n;
+                    temp.setWins(n);
+                    s<<vars[2];
+                    s>>n;
+                    temp.setYardsAllowed(n);
+                    s<<vars[3];
+                    s>>n;
+                    temp.setTotalPts(n);
+                    s<<vars[4];
+                    s>>n;
+                    temp.setPtsAllowed(n);
+                    s<<vars[5];
+                    s>>n;
+                    temp.setYds(n);
                     matches.push_back(temp);
 
                 }   }
@@ -118,13 +169,17 @@ public:
                 }
 
         }
-        //parralelize later
+        //int start=omp_get_wtime();
+        //#pragma parrallel for 
         for(int j = 0 ; j<matches.size();j+2){
             if(j+1>=matches.size()){break;}
             double probA = matches[j].calcWinProb(matches[j],matches[j+1]);
             double probB = 1- probA;
             cout<< "prob: "<<matches[j].getName()<<"-"<< probA <<matches[j+1].getName()<<"-"<< probB <<endl;
         }
+        //int elapsed=omp_get_wtime();
+        //int finish=elapsed-start();
+        //cout<<"Time recorded: "<<finish<<endl;
     }
     
 
@@ -166,18 +221,18 @@ public:
 
         }
         insertionSort(list);
+        //#pragma parrallel for
         for(int i=0; i<list.size();i++){
             cout<<list[i].getName()<<" "<< list[i].getTeam()<<" "<< list[i].getAge()<<" "<< list[i].getrecvTargets()<<" "<< list[i].getrecvYards()<<" "<< list[i].getroutesRun()<<endl;
- 
         }
     }
-
       void insertionSort(vector<Player>arr){
         //key should the comparable variable that ranks the players. 
         int i,j;
         Player key;
         int size= arr.size();
-        //add #pragma parrallel for
+         //int start=omp_get_wtime();
+        //#pragma parrallel for
         for(i=1;i<size-1;i++){
             key = arr[i];
             j=i-1;
@@ -188,6 +243,9 @@ public:
             }
             arr[j+1]=key;
         }
+        //int elapsed=omp_get_wtime();
+        //int finish=elapsed-start();
+        //cout<<"Time recorded: "<<finish<<endl;
 
     }
 
