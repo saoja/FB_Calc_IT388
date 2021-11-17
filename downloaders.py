@@ -134,97 +134,100 @@ def download_all_players(letter):
             player_fname = ""
             player_lname = player_name[0]
 
-        if table.find("stats"):
-            out_file = open(players_directory+ "/" + player_lname + player_fname + ".csv", "w")
-            out_writer = csv.writer(out_file)
-        
+        try:
+            if table.find("stats"):
+                out_file = open(players_directory+ "/" + player_lname + player_fname + ".csv", "w")
+                out_writer = csv.writer(out_file)
+            
 
-            if pos == "TE" or pos == "WR":
+                if pos == "TE" or pos == "WR":
 
-                rows = []
-                try:
-                    rows = table.findAll("tr")
-                except:
-                    pass
-                for row in rows:
-                    cells = row.findAll("td")
-                    row_to_write = []
-                    if len(cells) > 0:
-                        try:
-                            targets = cells[5].text
-                            receptions = cells[6].text
-                            rec_yards = cells[7].text
-                            touchdowns = cells[9].text
-
-                            row_to_write.append(targets)
-                            row_to_write.append(receptions)
-                            row_to_write.append(rec_yards)
-                            row_to_write.append(touchdowns)
-                            out_writer.writerow(row_to_write)
-                        except:
-                            pass
-                    else:
+                    rows = []
+                    try:
+                        rows = table.findAll("tr")
+                    except:
                         pass
+                    for row in rows:
+                        cells = row.findAll("td")
+                        row_to_write = []
+                        if len(cells) > 0:
+                            try:
+                                targets = cells[5].text
+                                receptions = cells[6].text
+                                rec_yards = cells[7].text
+                                touchdowns = cells[9].text
 
-                    row_to_write = []
-                    
-            elif pos == "RB":
-                rows = []
-                try:
-                    rows = table.findAll("tr")
-                except:
-                    pass
-                for row in rows:
-                    cells = row.findAll("td")
-                    row_to_write = []
-                    if len(cells) > 0:
-                        try:
-                            rushes = cells[6].text
-                            rush_yds = cells[7].text
-                            touchdowns = cells[9].text
-
-                            row_to_write.append(rushes)
-                            row_to_write.append(rush_yds)
-                            row_to_write.append(touchdowns)
-                            out_writer.writerow(row_to_write)
-                        except:
+                                row_to_write.append(targets)
+                                row_to_write.append(receptions)
+                                row_to_write.append(rec_yards)
+                                row_to_write.append(touchdowns)
+                                out_writer.writerow(row_to_write)
+                            except:
+                                pass
+                        else:
                             pass
-                    else:
+
+                        row_to_write = []
+                        
+                elif pos == "RB":
+                    rows = []
+                    try:
+                        rows = table.findAll("tr")
+                    except:
                         pass
+                    for row in rows:
+                        cells = row.findAll("td")
+                        row_to_write = []
+                        if len(cells) > 0:
+                            try:
+                                rushes = cells[6].text
+                                rush_yds = cells[7].text
+                                touchdowns = cells[9].text
 
-                    row_to_write = []
-
-            elif pos == "QB":
-                rows = []
-                try:
-                    rows = table.findAll("tr")
-                except:
-                    pass
-                for row in rows:
-                    cells = row.findAll("td")
-                    row_to_write = []
-                    if len(cells) > 0:
-                        try:
-                            completions = cells[6].text
-                            attempts = cells[7].text
-                            pass_yards = cells[9].text
-                            pass_tds = cells[10].text
-                            ints = cells[11].text
-
-                            row_to_write.append(completions)
-                            row_to_write.append(attempts)
-                            row_to_write.append(pass_yards)
-                            row_to_write.append(pass_tds)
-                            row_to_write.append(ints)
-                            out_writer.writerow(row_to_write)
-                        except:
+                                row_to_write.append(rushes)
+                                row_to_write.append(rush_yds)
+                                row_to_write.append(touchdowns)
+                                out_writer.writerow(row_to_write)
+                            except:
+                                pass
+                        else:
                             pass
-                    else:
-                        pass
 
-                    row_to_write = []
-            else:
-                pass
+                        row_to_write = []
+
+                elif pos == "QB":
+                    rows = []
+                    try:
+                        rows = table.findAll("tr")
+                    except:
+                        pass
+                    for row in rows:
+                        cells = row.findAll("td")
+                        row_to_write = []
+                        if len(cells) > 0:
+                            try:
+                                completions = cells[6].text
+                                attempts = cells[7].text
+                                pass_yards = cells[9].text
+                                pass_tds = cells[10].text
+                                ints = cells[11].text
+
+                                row_to_write.append(completions)
+                                row_to_write.append(attempts)
+                                row_to_write.append(pass_yards)
+                                row_to_write.append(pass_tds)
+                                row_to_write.append(ints)
+                                out_writer.writerow(row_to_write)
+                            except:
+                                pass
+                        else:
+                            pass
+
+                        row_to_write = []
+                else:
+                    pass
+        except:
+            pass
 
 # parallelism will speedup the hell outta this though
 def download_teams_serial():
