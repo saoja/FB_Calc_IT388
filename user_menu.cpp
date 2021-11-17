@@ -1,6 +1,6 @@
 #include <iostream>
 #include "downloaders.cpp"
-
+#include "Driver.cpp"
 using namespace std;
 
 bool menu();
@@ -30,20 +30,30 @@ bool menu(){
     cin>>selection;
     cout<<"Enter the name (mascot for a team): ";
     cin>>user_in;
+    
+    Driver drive =new Driver();
 
     // execute correct function
     switch(selection){
         case 1:
             // download the correct data
             // single game prediction
+            string TeamA_CSV;
+            string TeamB_CSV;
+            drive.calcTeamWinProb(TeamA_CSV,TeamB_CSV);
             break;
         case 2:
             // download the correct data
             // display all of the week's predictions
+            vector<string> matchups;
+            //push_back() all teams csv files in matchups this week
+            drive.calcAllTeamMatchUps();
             break;
         case 3:
             // download the correct data
             // predict the players stats for the week
+            string Players_CSV;
+            drive.Players(Players_CSV);
         case 4:
             return false;
             break;
