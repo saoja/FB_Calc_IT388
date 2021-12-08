@@ -1,61 +1,39 @@
 
+#include "Player.h"
+Player::Player(){}
+string Player::getName(){
+    return name;
+}
 
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <string>
+string Player::getTeam(){
+    return team;
+}
 
-using namespace std;
+int Player:: getAge(){
+    return age;
+}
 
-class Player{
-    public:
+int  Player::getrecvYards(){ return recivingYards;}
 
-        string name=" ";
-        string team=" ";
-        int age=0;
-        int recivingYards=0;
-        int recivingTargets=0;
-        int routesRun=0;
-        //calculations vars
-        int yprr = 0;
-        int ypt =0;
-
-    Player(){}
-
-    string  getName(){
-        return name;
-    }
-
-    string getTeam(){
-        return team;
-    }
-
-    int  getAge(){
-        return age;
-    }
-
-    int  getrecvYards(){ return recivingYards;}
-
-    int  getrecvTargets(){ return recivingTargets;}
+int  Player::getrecvTargets(){ return recivingTargets;}
 
    
-    int  getroutesRun(){ return routesRun;}
+int  Player::getroutesRun(){ return routesRun;}
 
       
-    //calculations vars
-    //Yards per routes run
+//calculations vars
+//Yards per routes run
     
-    int  getYprr(){
-        yprr=recivingYards/routesRun;
-        return yprr;
-    }
+int  Player::getYprr(){
+    yprr=recivingYards/routesRun;
+    return yprr;
+}
    
     //yards per Target
-    int getYpt(){
-        ypt =  recivingYards/ recivingTargets;
-        return ypt;
-    }
+int Player::getYpt(){
+    ypt =  recivingYards/ recivingTargets;
+    return ypt;
+}
     
 
 
@@ -63,24 +41,24 @@ class Player{
     
     
    
-    void  setName(string name){
+    void  Player::setName(string name){
         this->name=name;
     }
    
-     void  setTeam(string team){
+     void  Player::setTeam(string team){
         this->team=team;
     }
     
-    void setAge(int age){
+    void Player::setAge(int age){
         this->age=age;
     }
    
-    void  setRecvingYards(int recivingYards){this->recivingYards=recivingYards;}
+    void  Player::setRecvingYards(int recivingYards){this->recivingYards=recivingYards;}
   
-    void setRecivingTargets(int recivingTargets){this->recivingTargets=recivingTargets;}
+    void Player::setRecivingTargets(int recivingTargets){this->recivingTargets=recivingTargets;}
     
-    void  setRoutesRun(int routesRun){this->routesRun=routesRun;}
+    void  Player::setRoutesRun(int routesRun){this->routesRun=routesRun;}
   
-};
+
 
 

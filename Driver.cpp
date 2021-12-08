@@ -1,232 +1,222 @@
 
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include"Team.cpp"
-#include <sstream>
-//include<omp.h>
-using namespace std;
-class Driver{
-public:
-    vector<Player> list;
-    vector<Team> teams;
-    double startTime=0;
-    double elapsed=0;
+#include "Driver.h"
 
 
-    Driver(){}
-    void CalcTeamWinProb(string TeamA,string TeamB){
+using std::cout; using std::cin;
+using std::endl; using std::vector;
+
+
+    Driver::Driver(){
+        list={};
+        teams={};
+        startTime=0;
+        elapsed=0;
+
+    }
+    void Driver:: CalcTeamWinProb(string TeamA,string TeamB){
+        
+        TeamA+=".csv";
+        TeamB+=".csv";
         Team A;
+        A.setName(TeamA);
         Team B;
+        B.setName(TeamB);
+        vector<int> varsA;
+        vector<int> varsB;
         //open team.csv files and push data into team objects
         fstream myFile;
-        myFile.open(TeamA,ios::in);
+        myFile.open("teams/"+TeamA,ios::in);
             if(myFile.is_open()){
             string line;
             //parralelize later
-            bool flag=true;
+          
             while(getline(myFile,line)){
-                if(flag==true){
-                   //this is to get rid of weird char as begining of file
-                   flag=false;}
-               else{
+               
                 stringstream iss(line);
 
-                vector<string> vars = { };
+              
 
                 while (iss.good()){
                     string substr;
                     getline(iss,substr,',');
-                    vars.push_back(substr);
+                    if(substr==""){}
+                    else{
+                        stringstream s;
+                        int n;
+                        s<<substr;
+                        s>>n;
+                        varsA.push_back(n);
+                    }
+                    
                 }
                 //iterate through vars and initialize team 
-                A.setName(vars[0]);// etc
-                stringstream s;
-                int n;
-                s<<vars[1];
-                s>>n;
-                A.setWins(n);
-                  s<<vars[2];
-                s>>n;
-                A.setYardsAllowed(n);
-                s<<vars[3];
-                s>>n;
-                A.setTotalPts(n);
-                s<<vars[4];
-                s>>n;
-                A.setPtsAllowed(n);
-                s<<vars[5];
-                s>>n;
-                A.setYds(n);
-
-                }
+                /*
+               
+                */
+                
             }
             myFile.close();
 
         }
-            myFile.open(TeamB,ios::in);
+            myFile.open("teams/"+TeamB,ios::in);
             if(myFile.is_open()){
             string line;
-            //parralelize later
-            bool flag =true;
             while(getline(myFile,line)){
-                if(flag==true){
-                   //this is to get rid of weird char as begining of file
-                   flag=false;}
-               else{
+               
                 stringstream iss(line);
-
-                vector<string> vars = { };
-
                 while (iss.good()){
                     string substr;
                     getline(iss,substr,',');
-                    vars.push_back(substr);
+                    if(substr==""){}
+                    else{
+                        stringstream s;
+                        int n;
+                        s<<substr;
+                        s>>n;
+                        varsB.push_back(n);
+                    }
+                    
                 }
                 //iterate through vars and initialize team 
-                B.setName(vars[0]);// etc
-                stringstream s;
-                int n;
-                s<<vars[1];
-                s>>n;
-                B.setWins(n);
-                  s<<vars[2];
-                s>>n;
-                B.setYardsAllowed(n);
-                s<<vars[3];
-                s>>n;
-                B.setTotalPts(n);
-                s<<vars[4];
-                s>>n;
-                B.setPtsAllowed(n);
-                s<<vars[5];
-                s>>n;
-                B.setYds(n);
-            }
+                /*
+                
+                */
             }
             myFile.close();
 
         }
-    
+      
+        int n;
+         //Team A
+               
+              
+                A.setWins(varsA[0]);
+               
+                A.setYardsAllowed(varsA[4]);
+               
+                A.setTotalPts(varsA[5]);
+              
+                A.setPtsAllowed(varsA[4]);
+             
+                A.setYds(varsA[6]);
+        //Team B
+              
+                B.setWins(varsB[0]);
+               
+                B.setYardsAllowed(varsB[4]);
+              
+                B.setTotalPts(varsB[5]);
+              
+                B.setPtsAllowed(varsB[4]);
+               
+                B.setYds(varsB[6]);
        
     
          double probA = A.calcWinProb(A,B);
          double probB = 1- probA;
         cout<< "prob: A-"<< probA << " B-" << probB <<endl;
-    
     }
-    void CalcAllTeamMatches(vector<string> Matchups){
-        vector<Team> matches;     
+    void Driver::CalcAllTeamMatches(string Matchups){
+        vector<string> matches;   
         //open team.csv files and push data into vector<Team> Matches
         fstream myFile;
         //parralelize later
-        for(int i = 0 ; i< Matchups.size();i++){
-                myFile.open(Matchups[i],ios::in);
+                myFile.open(Matchups,ios::in);
                 if(myFile.is_open()){
                     string line;
-                    bool flag=true;
                     while(getline(myFile,line)){
-                        if(flag==true){
-                         //this is to get rid of weird char as begining of file
-                        flag=false;}
-                        else{
+                  
                     stringstream iss(line);
-
-                    vector<string> vars = { };
-                    Team temp;
-
                     while (iss.good()){
                         string substr;
                         getline(iss,substr,',');
-                        vars.push_back(substr);
+                        if(substr==""){}
+                        else{
+                        matches.push_back(substr);
+                        }
                     }
-                    //iterate through vars and initialize team 
-                    temp.setName(vars[0]);// etc
-                     stringstream s;
-                    int n;
-                    s<<vars[1];
-                    s>>n;
-                    temp.setWins(n);
-                    s<<vars[2];
-                    s>>n;
-                    temp.setYardsAllowed(n);
-                    s<<vars[3];
-                    s>>n;
-                    temp.setTotalPts(n);
-                    s<<vars[4];
-                    s>>n;
-                    temp.setPtsAllowed(n);
-                    s<<vars[5];
-                    s>>n;
-                    temp.setYds(n);
-                    matches.push_back(temp);
-
-                }   }
-                myFile.close();
+                    }
+                    myFile.close();
 
                 }
-
-        }
-        //int start=omp_get_wtime();
-        //#pragma parrallel for 
-        for(int j = 0 ; j<matches.size();j+2){
+                
+        int start=omp_get_wtime();
+       
+        
+        #pragma parrallel for
+        for(int j = 0 ; j<matches.size();j++){
             if(j+1>=matches.size()){break;}
-            double probA = matches[j].calcWinProb(matches[j],matches[j+1]);
-            double probB = 1- probA;
-            cout<< "prob: "<<matches[j].getName()<<"-"<< probA <<matches[j+1].getName()<<"-"<< probB <<endl;
+            CalcTeamWinProb(matches[j],matches[j+1]);
         }
-        //int elapsed=omp_get_wtime();
-        //int finish=elapsed-start();
-        //cout<<"Time recorded: "<<finish<<endl;
+        int elapsed=omp_get_wtime();
+        int finish=elapsed-start();
+        cout<<"Time recorded: "<<finish<<endl;
     }
     
 
   
-    void Players(string playersFile){
+    void Driver:: Players(string playerFolder){
+        DIR *dir; struct dirent *diread;
+        vector<string> files;
 
-        vector<Player> list;
+        if ((dir = opendir("players")) != nullptr) {
+            while ((diread = readdir(dir)) != nullptr) {
+                files.push_back(diread->d_name);
+            }
+            closedir (dir);
+        } else {
+            perror ("opendir");
+            return;
+        }
+    //to get rid of 2 files that are just "."'s
+    files.erase (files.begin());
+    files.erase (files.begin());
+    
+       
         //change to while loop
+    for (auto file : files) {
+       
         fstream myFile;
-        myFile.open(playersFile,ios::in);
+        myFile.open("players/"+file,ios::in);
             if(myFile.is_open()){
             string line;
             //parralelize later
-            bool flag=true;
+            vector<string> vars={""};
             while(getline(myFile,line)){
-                if(flag==true){
-                   //this is to get rid of weird char as begining of file
-                   flag=false;}
-               else{
                 stringstream iss(line);
-
-                vector<string> vars = { };
-
                while (iss.good()){
                     string substr;
                     getline(iss,substr,',');
+                    
                     vars.push_back(substr);
+                    }
                 }
-                //iterate through vars and initialize player
-                Player temp;
-                temp.setName(vars[0]);
-                // etc
 
-
-                list.push_back(temp);
-
-            }}
+                if(vars.size()>3){
+                    
+                    Player temp;
+                    string name= file;
+                    //removing ".csv" from file name
+                    name.resize(name.size() - 4);
+                    temp.setName(name);
+                    temp.setRecivingTargets(1);
+                    temp.setRecvingYards(rand()%10);
+                    temp.setRoutesRun(1);
+                    list.push_back(temp);
+                }
+            }
             myFile.close();
 
         }
+
         insertionSort(list);
-        //#pragma parrallel for
+        #pragma parrallel for
         for(int i=0; i<list.size();i++){
-            cout<<list[i].getName()<<" "<< list[i].getTeam()<<" "<< list[i].getAge()<<" "<< list[i].getrecvTargets()<<" "<< list[i].getrecvYards()<<" "<< list[i].getroutesRun()<<endl;
+            cout<<list[i].getName()<<" "<< list[i].getAge()<<" "<< list[i].getrecvTargets()<<" "<< list[i].getrecvYards()<<" "<< list[i].getroutesRun()<<endl;
         }
     }
-      void insertionSort(vector<Player>arr){
+    
+void  Driver::insertionSort( vector<Player> arr){
         //key should the comparable variable that ranks the players. 
         int i,j;
         Player key;
@@ -243,17 +233,13 @@ public:
             }
             arr[j+1]=key;
         }
-        //int elapsed=omp_get_wtime();
-        //int finish=elapsed-start();
-        //cout<<"Time recorded: "<<finish<<endl;
 
-    }
+        list=arr;
+        int elapsed=omp_get_wtime();
+        int finish=elapsed-start();
+        cout<<"Time recorded: "<<finish<<endl;
 
+}
 
-
-
-
- 
-};
 
 

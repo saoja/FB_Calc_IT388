@@ -1,23 +1,15 @@
 #include <iostream>
-#include "downloaders.cpp"
 #include "Driver.cpp"
+
+
 using namespace std;
 
-bool menu();
+
 
 int main(){
 
-    cout<<"---Weekly Football Predictor---\n";
-    cout<<"---Stephen Oja, Tre Blankenship\n";
-    cout<<"---2021\n\n";
-
-    return 0;
-}
-
-bool menu(){
-
     // variables for menu use
-    int selection;  // function type
+    int selection=1;  // function type
     string user_in; // team or player names
 
     // Menu
@@ -27,55 +19,42 @@ bool menu(){
     cout<<"\t3. Player Prediction\n";
     cout<<"\t4. Quit\n";
     cout<<"Selection: ";
-    cin>>selection;
-    cout<<"Enter the name (mascot for a team): ";
+ 
+    //cout<<"Enter the name (mascot for a team): ";
     cin>>user_in;
     
-    Driver drive =new Driver();
-
+    Driver drive;
+    string TeamA_CSV;
+    string TeamB_CSV;
+    string matchups="matchups.csv";
+    string Players_CSV;
     // execute correct function
     switch(selection){
         case 1:
-            // download the correct data
             // single game prediction
-            string TeamA_CSV;
-            string TeamB_CSV;
-            drive.calcTeamWinProb(TeamA_CSV,TeamB_CSV);
+            cout<<"Enter first team name): ";
+            cin>>TeamA_CSV;
+            cout<<"Enter second team name): ";
+            cin>>TeamB_CSV;
+            drive.CalcTeamWinProb(TeamA_CSV,TeamB_CSV);
             break;
         case 2:
-            // download the correct data
+        
             // display all of the week's predictions
-            vector<string> matchups;
-            //push_back() all teams csv files in matchups this week
-            drive.calcAllTeamMatchUps();
+            cout<<"Match up probabilities"<<endl;
+            drive.CalcAllTeamMatches(matchups);
             break;
         case 3:
-            // download the correct data
+       
             // predict the players stats for the week
-            string Players_CSV;
+            cout<<"Player's Ranking"<<endl;;
             drive.Players(Players_CSV);
         case 4:
             return false;
             break;
         default:
             cout<<"Error: Enter a correct number (1-4)";
-            menu();
             break;
     }
 
-    // continue?
-    char cont;
-    cout<<"Continue? [y/n] : ";
-    cin>>cont;
-    if(cont == 'y'){
-        menu();
-    }
-    else if(cont == 'n'){
-        cout<<"exiting...";
-        exit(-1);
-    }
-    else{
-        cout<<"Incorrect input, terminating...";
-        exit(-1);
-    }
 }
