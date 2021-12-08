@@ -1,0 +1,23 @@
+#!/bin/bash
+#SBATCH --job-name="main"
+#SBATCH --output="output.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem=25G
+#SBATCH --account=isu100
+#SBATCH --export=ALL
+#SBATCH -t 00:30:00
+
+
+#Run the job
+./main 1
+
+./main 2
+
+./main 5
+
+./main 10
+
+./main 20

@@ -23,12 +23,11 @@ using std::endl; using std::vector;
         B.setName(TeamB);
         vector<int> varsA;
         vector<int> varsB;
-        //open team.csv files and push data into team objects
         fstream myFile;
-        myFile.open("teams/"+TeamA,ios::in);
+        myFile.open("/home/saoja/expanse/Project/teams"+TeamA,ios::in);
             if(myFile.is_open()){
             string line;
-            //parralelize later
+            
           
             while(getline(myFile,line)){
                
@@ -49,10 +48,6 @@ using std::endl; using std::vector;
                     }
                     
                 }
-                //iterate through vars and initialize team 
-                /*
-               
-                */
                 
             }
             myFile.close();
@@ -77,10 +72,6 @@ using std::endl; using std::vector;
                     }
                     
                 }
-                //iterate through vars and initialize team 
-                /*
-                
-                */
             }
             myFile.close();
 
@@ -120,7 +111,7 @@ using std::endl; using std::vector;
         vector<string> matches;   
         //open team.csv files and push data into vector<Team> Matches
         fstream myFile;
-        //parralelize later
+       
                 myFile.open(Matchups,ios::in);
                 if(myFile.is_open()){
                     string line;
@@ -172,15 +163,14 @@ using std::endl; using std::vector;
     files.erase (files.begin());
     files.erase (files.begin());
     
-       
-        //change to while loop
+    #pragma parrallel for
     for (auto file : files) {
        
         fstream myFile;
         myFile.open("players/"+file,ios::in);
             if(myFile.is_open()){
             string line;
-            //parralelize later
+          
             vector<string> vars={""};
             while(getline(myFile,line)){
                 stringstream iss(line);
@@ -199,9 +189,9 @@ using std::endl; using std::vector;
                     //removing ".csv" from file name
                     name.resize(name.size() - 4);
                     temp.setName(name);
-                    temp.setRecivingTargets(1);
-                    temp.setRecvingYards(rand()%10);
-                    temp.setRoutesRun(1);
+                    temp.setRecivingTargets(vars[1]);
+                    temp.setRecvingYards(vars[3]);
+                    temp.setRoutesRun(vars[2]);
                     list.push_back(temp);
                 }
             }
@@ -212,7 +202,7 @@ using std::endl; using std::vector;
         insertionSort(list);
         #pragma parrallel for
         for(int i=0; i<list.size();i++){
-            cout<<list[i].getName()<<" "<< list[i].getAge()<<" "<< list[i].getrecvTargets()<<" "<< list[i].getrecvYards()<<" "<< list[i].getroutesRun()<<endl;
+            cout<<list[i].getName()<<" Age:"<< list[i].getAge()<<" recvTargets: "<< list[i].getrecvTargets()<<" recvYards: "<< list[i].getrecvYards()<<" routesRun: "<< list[i].getroutesRun()<<endl;
         }
     }
     
@@ -221,8 +211,8 @@ void  Driver::insertionSort( vector<Player> arr){
         int i,j;
         Player key;
         int size= arr.size();
-         //int start=omp_get_wtime();
-        //#pragma parrallel for
+         int start=omp_get_wtime();
+        #pragma parrallel for
         for(i=1;i<size-1;i++){
             key = arr[i];
             j=i-1;
